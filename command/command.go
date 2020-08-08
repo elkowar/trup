@@ -40,14 +40,14 @@ var Commands = map[string]Command{
 		Usage: modpingUsage,
 		Help:  modpingHelp,
 	},
-	"fetch": {
+	"fetch": needsDBAccessCommand(Command{
 		Exec:  fetch,
 		Usage: fetchUsage,
-	},
-	"setfetch": {
+	}),
+	"setfetch": needsDBAccessCommand(Command{
 		Exec: setFetch,
 		Help: setFetchHelp,
-	},
+	}),
 	"repo": {
 		Exec: repo,
 		Help: repoHelp,
@@ -56,21 +56,21 @@ var Commands = map[string]Command{
 		Exec:  move,
 		Usage: moveUsage,
 	},
-	"git": {
+	"git": needsDBAccessCommand(Command{
 		Exec:  git,
 		Usage: gitUsage,
 		Help:  gitHelp,
-	},
-	"dotfiles": {
+	}),
+	"dotfiles": needsDBAccessCommand(Command{
 		Exec:  dotfiles,
 		Usage: dotfilesUsage,
 		Help:  dotfilesHelp,
-	},
-	"desc": {
+	}),
+	"desc": needsDBAccessCommand(Command{
 		Exec:  desc,
 		Usage: descUsage,
 		Help:  descHelp,
-	},
+	}),
 	"role": {
 		Exec:  role,
 		Usage: roleUsage,
@@ -95,18 +95,29 @@ var Commands = map[string]Command{
 		Usage: purgeUsage,
 		Help:  purgeHelp,
 	}),
-	"note": moderatorOnly(Command{
+	"note": needsDBAccessCommand(moderatorOnly(Command{
 		Exec:  note,
 		Usage: noteUsage,
-	}),
-	"warn": moderatorOnly(Command{
+	})),
+	"warn": needsDBAccessCommand(moderatorOnly(Command{
 		Exec:  warn,
 		Usage: warnUsage,
-	}),
+	})),
 	"mute": moderatorOnly(Command{
 		Exec:  mute,
 		Usage: muteUsage,
 	}),
+}
+
+func needsDBAccessCommand(cmd Command) Command {
+	return Command{
+		Exec: func(ctx *Context, args []string) {
+			ctx.Reply("Sorry, a hurricane has interrupted my connection to the database, so i currently cannot do this for you.")
+		},
+		Usage:         cmd.Usage,
+		Help:          cmd.Help,
+		ModeratorOnly: false,
+	}
 }
 
 var parseMentionRegexp = regexp.MustCompile(`<@!?(\d+)>`)
