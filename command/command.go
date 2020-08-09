@@ -116,7 +116,7 @@ func needsDBAccessCommand(cmd Command) Command {
 		},
 		Usage:         cmd.Usage,
 		Help:          cmd.Help,
-		ModeratorOnly: false,
+		ModeratorOnly: cmd.ModeratorOnly,
 	}
 }
 
