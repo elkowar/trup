@@ -112,7 +112,7 @@ var Commands = map[string]Command{
 func needsDBAccessCommand(cmd Command) Command {
 	return Command{
 		Exec: func(ctx *Context, args []string) {
-			ctx.Reply("Sorry, a hurricane has interrupted my connection to the database, so i currently cannot do this for you.")
+			ctx.Reply("Sorry, a hurricane has interrupted my connection to the database, so i currently cannot do this for you <a:pensibe:678483024295493640>")
 		},
 		Usage:         cmd.Usage,
 		Help:          cmd.Help,
